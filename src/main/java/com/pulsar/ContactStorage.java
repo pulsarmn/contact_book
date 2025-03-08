@@ -15,4 +15,8 @@ public class ContactStorage {
         this.contacts = new HashSet<>();
         this.groupedContacts = new HashMap<>();
     }
+
+    public boolean contains(Contact contact) {
+        return contact != null && contacts.contains(contact);
+    }
 }
