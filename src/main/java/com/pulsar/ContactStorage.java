@@ -1,5 +1,6 @@
 package com.pulsar;
 
+import com.pulsar.exception.DuplicateContactException;
 import com.pulsar.model.Contact;
 import com.pulsar.util.Printer;
 
@@ -23,7 +24,7 @@ public class ContactStorage {
 
     public void add(Contact contact) {
         if (contains(contact)) {
-            Printer.displayError("Данный контакт уже существует");
+            throw new DuplicateContactException("Данный контакт уже существует!");
         } else {
             orderedContacts.add(contact);
             contacts.add(contact);
@@ -116,7 +117,7 @@ public class ContactStorage {
             throw new IllegalArgumentException(message);
         }
     }
-    
+
     public void clear() {
         orderedContacts.clear();
         contacts.clear();
