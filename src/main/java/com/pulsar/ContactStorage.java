@@ -127,4 +127,10 @@ public class ContactStorage {
             throw new IllegalArgumentException(message);
         }
     }
+    
+    public void clear() {
+        orderedContacts.clear();
+        contacts.clear();
+        groupedContacts.clear();
+    }
 }
