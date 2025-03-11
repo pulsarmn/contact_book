@@ -44,7 +44,7 @@ public class ContactStorage {
         validate(phoneNumber, EMPTY_PHONE_NUMBER);
 
         return contacts.stream()
-                .filter(contact -> contact.getPhone().equals(phoneNumber))
+                .filter(contact -> contact.getPhoneNumber().equals(phoneNumber))
                 .findFirst();
     }
 
@@ -56,7 +56,7 @@ public class ContactStorage {
         while (iterator.hasNext()) {
             Contact contact = iterator.next();
 
-            if (contact.getName().equals(contactName) && contact.getPhone().equals(phoneNumber)) {
+            if (contact.getName().equals(contactName) && contact.getPhoneNumber().equals(phoneNumber)) {
                 orderedContacts.remove(contact);
                 groupedContacts.get(contact.getGroup()).remove(contact);
                 iterator.remove();
