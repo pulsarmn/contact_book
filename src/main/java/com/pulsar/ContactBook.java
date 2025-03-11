@@ -20,6 +20,25 @@ public class ContactBook {
         this.terminal = new Scanner(System.in);
     }
 
+    public void start() {
+        isRunning = true;
+        while (isRunning) {
+            Printer.displayMainMenu();
+            Printer.inputRequest();
+
+            Command command;
+
+            try {
+                command = Command.get(terminal.nextLine());
+            } catch (IllegalArgumentException e) {
+                Printer.displayError(e.getMessage());
+                continue;
+            }
+
+            processCommand(command);
+        }
+    }
+
     private void processCommand(Command command) {
         switch (command) {
             case ADD_CONTACT -> addContact();
