@@ -76,6 +76,10 @@ public class ContactBook {
         }
     }
 
+    private void viewContacts() {
+        contactStorage.printContacts();
+    }
+
     private enum Command {
         ADD_CONTACT("1"),
         DELETE_CONTACT("2"),
