@@ -5,6 +5,7 @@ import com.pulsar.util.Printer;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 
 public class ContactBook {
@@ -100,6 +101,28 @@ public class ContactBook {
         } else {
             Printer.displaySuccess("Результат поиска:");
             contacts.forEach(System.out::println);
+        }
+    }
+
+    private void findSingleContact() {
+        Printer.display("Введите номер телефона:");
+        Printer.inputRequest();
+        String phoneNumber = terminal.nextLine();
+
+        Optional<Contact> contact;
+
+        try {
+            contact = contactStorage.findByPhoneNumber(phoneNumber);
+        } catch (Exception e) {
+            Printer.displayError(e.getMessage());
+            return;
+        }
+
+        if (contact.isEmpty()) {
+            Printer.displayError("Контакт по номеру %s не найден!".formatted(phoneNumber));
+        } else {
+            Printer.displaySuccess("Результат поиска:");
+            contact.ifPresent(System.out::println);
         }
     }
 
