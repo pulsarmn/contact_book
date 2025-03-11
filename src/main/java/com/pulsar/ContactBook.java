@@ -47,6 +47,35 @@ public class ContactBook {
         }
     }
 
+    private void deleteContact() {
+        Printer.display("Введите название контакта:");
+        Printer.inputRequest();
+        String contactName = terminal.nextLine();
+
+        Printer.display("Введите номер телефона(необязательно):");
+        Printer.inputRequest();
+        String phoneNumber = terminal.nextLine();
+
+        if (contactName == null || contactName.isBlank()) {
+            Printer.displayError("Имя контакта не должно быть пустым!");
+            return;
+        }
+
+        boolean hasBeenDeleted;
+
+        if (phoneNumber == null || phoneNumber.isBlank()) {
+            hasBeenDeleted = contactStorage.deleteAll(contactName);
+        } else {
+            hasBeenDeleted = contactStorage.delete(contactName, phoneNumber);
+        }
+
+        if (hasBeenDeleted) {
+            Printer.displaySuccess("Контакт(ы) успешно удален(ы)!");
+        } else {
+            Printer.displayError("Контакт не был удалён!");
+        }
+    }
+
     private enum Command {
         ADD_CONTACT("1"),
         DELETE_CONTACT("2"),
