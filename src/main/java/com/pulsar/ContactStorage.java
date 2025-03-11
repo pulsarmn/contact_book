@@ -102,6 +102,22 @@ public class ContactStorage {
         }
     }
 
+    public void printByGroup(String groupName) {
+        validate(groupName, "Имя группы не может быть пустым!");
+
+        List<Contact> contacts = groupedContacts.get(groupName);
+        if (contacts == null) {
+            Printer.displayError("Группа %s не существует".formatted(groupName));
+        } else if (contacts.isEmpty()) {
+            Printer.displayError("В группе %s нет контактов".formatted(groupName));
+        } else {
+            Iterator<Contact> iterator = contacts.iterator();
+            while (iterator.hasNext()) {
+                System.out.println(iterator.next());
+            }
+        }
+    }
+
     public boolean contains(Contact contact) {
         return contact != null && contacts.contains(contact);
     }
