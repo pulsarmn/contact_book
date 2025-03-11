@@ -14,12 +14,13 @@ public final class Printer {
         OUTPUT.println("2. Удалить контакт");
         OUTPUT.println("3. Посмотреть все контакты");
         OUTPUT.println("4. Найти контакты");
-        OUTPUT.println("5. Посмотреть контакты по группе");
+        OUTPUT.println("5. Найти контакт");
+        OUTPUT.println("6. Посмотреть контакты по группе");
         OUTPUT.println("0. Выход");
     }
 
     public static void inputRequest() {
-        OUTPUT.println("> ");
+        OUTPUT.print("> ");
     }
 
     public static void displayInputError() {
