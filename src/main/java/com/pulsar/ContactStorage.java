@@ -5,6 +5,7 @@ import com.pulsar.model.Contact;
 import com.pulsar.util.Printer;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ContactStorage {
 
@@ -27,6 +28,16 @@ public class ContactStorage {
             groupedContacts.computeIfAbsent(contact.getGroup(), k -> new ArrayList<>())
                     .add(contact);
         }
+    }
+
+    public List<Contact> findByName(String contactName) {
+        if (contactName == null || contactName.isBlank()) {
+            throw new IllegalArgumentException("Имя контакта не может быть пустым!");
+        }
+
+        return contacts.stream()
+                .filter(contact -> contact.getName().toLowerCase().contains(contactName.toLowerCase()))
+                .collect(Collectors.toList());
     }
 
     public boolean delete(String contactName, String phoneNumber) throws ContactNotFoundException {
@@ -69,6 +80,21 @@ public class ContactStorage {
         }
 
         return deleted;
+    }
+
+    public void printContacts() {
+        Iterator<Contact> iterator = orderedContacts.iterator();
+
+        if (iterator.hasNext()) {
+            Printer.displaySuccess("Список ваших контактов:");
+        }else {
+            Printer.displayError("Телефонная книга пуста!");
+        }
+
+        while (iterator.hasNext()) {
+            Contact contact = iterator.next();
+            System.out.println(contact);
+        }
     }
 
     public boolean contains(Contact contact) {
