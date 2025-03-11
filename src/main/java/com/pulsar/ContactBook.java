@@ -3,10 +3,7 @@ package com.pulsar;
 import com.pulsar.model.Contact;
 import com.pulsar.util.Printer;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.Scanner;
+import java.util.*;
 
 public class ContactBook {
 
@@ -123,6 +120,24 @@ public class ContactBook {
         } else {
             Printer.displaySuccess("Результат поиска:");
             contact.ifPresent(System.out::println);
+        }
+    }
+
+    private void findContactsByGroup() {
+        Printer.display("Введите название группы:");
+        Printer.inputRequest();
+        String groupName = terminal.nextLine();
+
+        List<Contact> contacts = contactStorage.findAllByGroup(groupName);
+        if (contacts == null) {
+            Printer.displayError("Группа %s не существует".formatted(groupName));
+        } else if (contacts.isEmpty()) {
+            Printer.displayError("В группе %s нет контактов".formatted(groupName));
+        } else {
+            Iterator<Contact> iterator = contacts.iterator();
+            while (iterator.hasNext()) {
+                System.out.println(iterator.next());
+            }
         }
     }
 
