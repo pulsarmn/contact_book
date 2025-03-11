@@ -40,7 +40,17 @@ public class ContactStorage {
                 .collect(Collectors.toList());
     }
 
-    public boolean delete(String contactName, String phoneNumber) throws ContactNotFoundException {
+    public Optional<Contact> findByPhoneNumber(String phoneNumber) {
+        if (phoneNumber == null || phoneNumber.isBlank()) {
+            throw new IllegalArgumentException("Номер телефона не может быть пустым!");
+        }
+
+        return contacts.stream()
+                .filter(contact -> contact.getPhone().equals(phoneNumber))
+                .findFirst();
+    }
+
+    public boolean delete(String contactName, String phoneNumber) {
         if (contactName == null || phoneNumber == null || contactName.isBlank() || phoneNumber.isBlank()) {
             throw new IllegalArgumentException("Имя контакта и номер телефона не могут быть пустыми!");
         }
