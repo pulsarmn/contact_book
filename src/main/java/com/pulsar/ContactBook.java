@@ -20,6 +20,22 @@ public class ContactBook {
         this.terminal = new Scanner(System.in);
     }
 
+    private void processCommand(Command command) {
+        switch (command) {
+            case ADD_CONTACT -> addContact();
+            case DELETE_CONTACT -> deleteContact();
+            case VIEW_ALL_CONTACTS -> viewContacts();
+            case FIND_CONTACTS -> findContacts();
+            case FIND_CONTACT -> findSingleContact();
+            case PRINT_CONTACTS_BY_GROUP -> findContactsByGroup();
+            case EXIT -> {
+                isRunning = false;
+                contactStorage.clear();
+                terminal.close();
+            }
+        }
+    }
+
     private void addContact() {
         Printer.display("Введите название контакта:");
         Printer.inputRequest();
