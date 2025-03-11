@@ -5,15 +5,19 @@ import java.util.Objects;
 public class Contact {
 
     private String name;
-    private String phone;
+    private String phoneNumber;
     private String email;
     private String group;
 
-    public Contact(String name, String phone, String email, String group) {
+    public Contact(String name, String phoneNumber, String email, String group) {
+        validate(name);
+        validate(phoneNumber);
+        validate(group);
+
         this.email = email;
         this.group = group;
         this.name = name;
-        this.phone = phone;
+        this.phoneNumber = phoneNumber;
     }
 
     public String getEmail() {
@@ -40,28 +44,34 @@ public class Contact {
         this.name = name;
     }
 
-    public String getPhone() {
-        return phone;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    private void validate(String param) {
+        if (param == null || param.isBlank()) {
+            throw new IllegalArgumentException("Невозможно создать контакт с такими параметрами!");
+        }
     }
 
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Contact contact = (Contact) o;
-        return name.equals(contact.getName()) && phone.equals(contact.getPhone()) && email.equals(contact.getEmail());
+        return name.equals(contact.getName()) && phoneNumber.equals(contact.getPhoneNumber());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, phone, email, group);
+        return Objects.hash(name, phoneNumber);
     }
 
     @Override
     public String toString() {
-        return "%s | %s | %s".formatted(name, phone, email);
+        return "%s | %s | %s | %s".formatted(name, phoneNumber, email, group);
     }
 }

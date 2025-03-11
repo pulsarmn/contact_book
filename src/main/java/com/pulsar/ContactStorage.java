@@ -1,5 +1,6 @@
 package com.pulsar;
 
+import com.pulsar.exception.DuplicateContactException;
 import com.pulsar.model.Contact;
 import com.pulsar.util.Printer;
 
@@ -23,7 +24,7 @@ public class ContactStorage {
 
     public void add(Contact contact) {
         if (contains(contact)) {
-            Printer.displayError("Данный контакт уже существует");
+            throw new DuplicateContactException("Данный контакт уже существует!");
         } else {
             orderedContacts.add(contact);
             contacts.add(contact);
@@ -44,7 +45,7 @@ public class ContactStorage {
         validate(phoneNumber, EMPTY_PHONE_NUMBER);
 
         return contacts.stream()
-                .filter(contact -> contact.getPhone().equals(phoneNumber))
+                .filter(contact -> contact.getPhoneNumber().equals(phoneNumber))
                 .findFirst();
     }
 
@@ -56,7 +57,7 @@ public class ContactStorage {
         while (iterator.hasNext()) {
             Contact contact = iterator.next();
 
-            if (contact.getName().equals(contactName) && contact.getPhone().equals(phoneNumber)) {
+            if (contact.getName().equals(contactName) && contact.getPhoneNumber().equals(phoneNumber)) {
                 orderedContacts.remove(contact);
                 groupedContacts.get(contact.getGroup()).remove(contact);
                 iterator.remove();
@@ -102,20 +103,9 @@ public class ContactStorage {
         }
     }
 
-    public void printByGroup(String groupName) {
+    public List<Contact> findAllByGroup(String groupName) {
         validate(groupName, "Имя группы не может быть пустым!");
-
-        List<Contact> contacts = groupedContacts.get(groupName);
-        if (contacts == null) {
-            Printer.displayError("Группа %s не существует".formatted(groupName));
-        } else if (contacts.isEmpty()) {
-            Printer.displayError("В группе %s нет контактов".formatted(groupName));
-        } else {
-            Iterator<Contact> iterator = contacts.iterator();
-            while (iterator.hasNext()) {
-                System.out.println(iterator.next());
-            }
-        }
+        return groupedContacts.get(groupName);
     }
 
     public boolean contains(Contact contact) {
@@ -126,5 +116,11 @@ public class ContactStorage {
         if (param == null || param.isBlank()) {
             throw new IllegalArgumentException(message);
         }
+    }
+
+    public void clear() {
+        orderedContacts.clear();
+        contacts.clear();
+        groupedContacts.clear();
     }
 }
