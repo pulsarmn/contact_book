@@ -49,6 +49,28 @@ public class ContactStorage {
         return false;
     }
 
+    public boolean deleteAll(String contactName) {
+        if (contactName == null || contactName.isBlank()) {
+            throw new IllegalArgumentException("Имя контакта не может быть пустым!");
+        }
+
+        boolean deleted = false;
+
+        Iterator<Contact> iterator = contacts.iterator();
+        while (iterator.hasNext()) {
+            Contact contact = iterator.next();
+
+            if (contact.getName().equals(contactName)) {
+                orderedContacts.remove(contact);
+                groupedContacts.get(contact.getGroup()).remove(contact);
+                iterator.remove();
+                deleted = true;
+            }
+        }
+
+        return deleted;
+    }
+
     public boolean contains(Contact contact) {
         return contact != null && contacts.contains(contact);
     }
