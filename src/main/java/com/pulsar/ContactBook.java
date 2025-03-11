@@ -4,6 +4,7 @@ import com.pulsar.model.Contact;
 import com.pulsar.util.Printer;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 public class ContactBook {
@@ -78,6 +79,28 @@ public class ContactBook {
 
     private void viewContacts() {
         contactStorage.printContacts();
+    }
+
+    private void findContacts() {
+        Printer.display("Введите название контакта:");
+        Printer.inputRequest();
+        String contactName = terminal.nextLine();
+
+        List<Contact> contacts;
+
+        try {
+            contacts = contactStorage.findByName(contactName);
+        } catch (Exception e) {
+            Printer.displayError(e.getMessage());
+            return;
+        }
+
+        if (contacts.isEmpty()) {
+            Printer.displayError("Контакты не найдены!");
+        } else {
+            Printer.displaySuccess("Результат поиска:");
+            contacts.forEach(System.out::println);
+        }
     }
 
     private enum Command {
