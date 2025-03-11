@@ -1,6 +1,5 @@
 package com.pulsar;
 
-import com.pulsar.exception.ContactNotFoundException;
 import com.pulsar.model.Contact;
 import com.pulsar.util.Printer;
 
@@ -12,6 +11,9 @@ public class ContactStorage {
     private final List<Contact> orderedContacts;
     private final Set<Contact> contacts;
     private final Map<String, List<Contact>> groupedContacts;
+
+    private static final String EMPTY_CONTACT_NAME = "Имя контакта не может быть пустым!";
+    private static final String EMPTY_PHONE_NUMBER = "Номер телефона не может быть пустым!";
 
     public ContactStorage() {
         this.orderedContacts = new ArrayList<>();
@@ -31,9 +33,7 @@ public class ContactStorage {
     }
 
     public List<Contact> findByName(String contactName) {
-        if (contactName == null || contactName.isBlank()) {
-            throw new IllegalArgumentException("Имя контакта не может быть пустым!");
-        }
+        validate(contactName, EMPTY_CONTACT_NAME);
 
         return contacts.stream()
                 .filter(contact -> contact.getName().toLowerCase().contains(contactName.toLowerCase()))
@@ -41,9 +41,7 @@ public class ContactStorage {
     }
 
     public Optional<Contact> findByPhoneNumber(String phoneNumber) {
-        if (phoneNumber == null || phoneNumber.isBlank()) {
-            throw new IllegalArgumentException("Номер телефона не может быть пустым!");
-        }
+        validate(phoneNumber, EMPTY_PHONE_NUMBER);
 
         return contacts.stream()
                 .filter(contact -> contact.getPhone().equals(phoneNumber))
@@ -51,9 +49,8 @@ public class ContactStorage {
     }
 
     public boolean delete(String contactName, String phoneNumber) {
-        if (contactName == null || phoneNumber == null || contactName.isBlank() || phoneNumber.isBlank()) {
-            throw new IllegalArgumentException("Имя контакта и номер телефона не могут быть пустыми!");
-        }
+        validate(contactName, EMPTY_CONTACT_NAME);
+        validate(phoneNumber, EMPTY_PHONE_NUMBER);
 
         Iterator<Contact> iterator = contacts.iterator();
         while (iterator.hasNext()) {
@@ -71,9 +68,7 @@ public class ContactStorage {
     }
 
     public boolean deleteAll(String contactName) {
-        if (contactName == null || contactName.isBlank()) {
-            throw new IllegalArgumentException("Имя контакта не может быть пустым!");
-        }
+        validate(contactName, EMPTY_CONTACT_NAME);
 
         boolean deleted = false;
 
@@ -97,7 +92,7 @@ public class ContactStorage {
 
         if (iterator.hasNext()) {
             Printer.displaySuccess("Список ваших контактов:");
-        }else {
+        } else {
             Printer.displayError("Телефонная книга пуста!");
         }
 
@@ -109,5 +104,11 @@ public class ContactStorage {
 
     public boolean contains(Contact contact) {
         return contact != null && contacts.contains(contact);
+    }
+
+    private void validate(String param, String message) {
+        if (param == null || param.isBlank()) {
+            throw new IllegalArgumentException(message);
+        }
     }
 }
