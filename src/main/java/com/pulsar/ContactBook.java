@@ -1,5 +1,8 @@
 package com.pulsar;
 
+import com.pulsar.model.Contact;
+import com.pulsar.util.Printer;
+
 import java.util.Arrays;
 import java.util.Scanner;
 
@@ -16,6 +19,32 @@ public class ContactBook {
     public ContactBook(ContactStorage contactStorage) {
         this.contactStorage = contactStorage;
         this.terminal = new Scanner(System.in);
+    }
+
+    private void addContact() {
+        Printer.display("Введите название контакта:");
+        Printer.inputRequest();
+        String contactName = terminal.nextLine();
+
+        Printer.display("Введите номер телефона:");
+        Printer.inputRequest();
+        String phoneNumber = terminal.nextLine();
+
+        Printer.display("Введите e-mail контакта:");
+        Printer.inputRequest();
+        String email = terminal.nextLine();
+
+        Printer.display("Введите группу:");
+        Printer.inputRequest();
+        String group = terminal.nextLine();
+
+        try {
+            Contact contact = new Contact(contactName, phoneNumber, email, group);
+            contactStorage.add(contact);
+            Printer.displaySuccess("Контакт успешно добавлен!");
+        } catch (Exception e) {
+            Printer.displayError(e.getMessage());
+        }
     }
 
     private enum Command {
