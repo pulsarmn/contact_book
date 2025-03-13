@@ -1,7 +1,9 @@
 package com.pulsar;
 
+import com.pulsar.exception.InvalidContactException;
 import com.pulsar.model.Contact;
 import com.pulsar.util.Printer;
+import com.pulsar.validation.ContactValidator;
 
 import java.util.*;
 
@@ -9,7 +11,10 @@ public class ContactBook {
 
     private final Scanner terminal;
     private final ContactStorage contactStorage;
+    private final ContactValidator contactValidator;
     private boolean isRunning = false;
+
+    private static final String INPUT_CONTACT_NAME = "Введите название контакта:";
 
     public ContactBook() {
         this(new ContactStorage());
@@ -18,6 +23,7 @@ public class ContactBook {
     public ContactBook(ContactStorage contactStorage) {
         this.contactStorage = contactStorage;
         this.terminal = new Scanner(System.in);
+        this.contactValidator = new ContactValidator();
     }
 
     public void start() {
@@ -56,7 +62,7 @@ public class ContactBook {
     }
 
     private void addContact() {
-        Printer.display("Введите название контакта:");
+        Printer.display(INPUT_CONTACT_NAME);
         Printer.inputRequest();
         String contactName = terminal.nextLine();
 
@@ -74,15 +80,20 @@ public class ContactBook {
 
         try {
             Contact contact = new Contact(contactName, phoneNumber, email, group);
+
+            contactValidator.validate(contact);
             contactStorage.add(contact);
+
             Printer.displaySuccess("Контакт успешно добавлен!");
+        } catch (InvalidContactException e) {
+            e.getErrors().forEach(Printer::displayError);
         } catch (Exception e) {
             Printer.displayError(e.getMessage());
         }
     }
 
     private void deleteContact() {
-        Printer.display("Введите название контакта:");
+        Printer.display(INPUT_CONTACT_NAME);
         Printer.inputRequest();
         String contactName = terminal.nextLine();
 
@@ -115,7 +126,7 @@ public class ContactBook {
     }
 
     private void findContacts() {
-        Printer.display("Введите название контакта:");
+        Printer.display(INPUT_CONTACT_NAME);
         Printer.inputRequest();
         String contactName = terminal.nextLine();
 

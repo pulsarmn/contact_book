@@ -2,7 +2,7 @@ package com.pulsar.util;
 
 import java.io.PrintStream;
 
-public final class Printer {
+public class Printer {
 
     private static final PrintStream OUTPUT = System.out;
 
@@ -35,7 +35,7 @@ public final class Printer {
         displayColoredMessage(message, ColorCode.BOLD_GREEN);
     }
 
-    public static void displayColoredMessage(String message, ColorCode color) {
+    private static void displayColoredMessage(String message, ColorCode color) {
         OUTPUT.println(color + message + ColorCode.RESET);
     }
 
