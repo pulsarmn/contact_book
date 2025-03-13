@@ -14,6 +14,8 @@ public class ContactBook {
     private final ContactValidator contactValidator;
     private boolean isRunning = false;
 
+    private static final String INPUT_CONTACT_NAME = "Введите название контакта:";
+
     public ContactBook() {
         this(new ContactStorage());
     }
@@ -60,7 +62,7 @@ public class ContactBook {
     }
 
     private void addContact() {
-        Printer.display("Введите название контакта:");
+        Printer.display(INPUT_CONTACT_NAME);
         Printer.inputRequest();
         String contactName = terminal.nextLine();
 
@@ -91,7 +93,7 @@ public class ContactBook {
     }
 
     private void deleteContact() {
-        Printer.display("Введите название контакта:");
+        Printer.display(INPUT_CONTACT_NAME);
         Printer.inputRequest();
         String contactName = terminal.nextLine();
 
@@ -124,7 +126,7 @@ public class ContactBook {
     }
 
     private void findContacts() {
-        Printer.display("Введите название контакта:");
+        Printer.display(INPUT_CONTACT_NAME);
         Printer.inputRequest();
         String contactName = terminal.nextLine();
 
