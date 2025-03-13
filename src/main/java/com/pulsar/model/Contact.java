@@ -10,10 +10,6 @@ public class Contact {
     private String group;
 
     public Contact(String name, String phoneNumber, String email, String group) {
-        validate(name);
-        validate(phoneNumber);
-        validate(group);
-
         this.email = email;
         this.group = group;
         this.name = name;
@@ -50,12 +46,6 @@ public class Contact {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
-    }
-
-    private void validate(String param) {
-        if (param == null || param.isBlank()) {
-            throw new IllegalArgumentException("Невозможно создать контакт с такими параметрами!");
-        }
     }
 
     @Override
