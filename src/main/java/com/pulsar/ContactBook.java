@@ -1,7 +1,9 @@
 package com.pulsar;
 
+import com.pulsar.exception.InvalidContactException;
 import com.pulsar.model.Contact;
 import com.pulsar.util.Printer;
+import com.pulsar.validation.ContactValidator;
 
 import java.util.*;
 
@@ -9,6 +11,7 @@ public class ContactBook {
 
     private final Scanner terminal;
     private final ContactStorage contactStorage;
+    private final ContactValidator contactValidator;
     private boolean isRunning = false;
 
     public ContactBook() {
@@ -18,6 +21,7 @@ public class ContactBook {
     public ContactBook(ContactStorage contactStorage) {
         this.contactStorage = contactStorage;
         this.terminal = new Scanner(System.in);
+        this.contactValidator = new ContactValidator();
     }
 
     public void start() {
@@ -74,8 +78,13 @@ public class ContactBook {
 
         try {
             Contact contact = new Contact(contactName, phoneNumber, email, group);
+
+            contactValidator.validate(contact);
             contactStorage.add(contact);
+
             Printer.displaySuccess("Контакт успешно добавлен!");
+        } catch (InvalidContactException e) {
+            e.getErrors().forEach(Printer::displayError);
         } catch (Exception e) {
             Printer.displayError(e.getMessage());
         }
